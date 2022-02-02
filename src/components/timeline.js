@@ -1,5 +1,5 @@
 import {useSelector, useDispatch} from 'react-redux';
-import {setCurrentTimeChanged} from '../reducers/currTime';
+import {setCurrentTimeChanged, setCurrentTime} from '../reducers/currTime';
 
 export default function Timeline() {
 

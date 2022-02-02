@@ -1,14 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    isPaused: false,
+    isPaused: true,
   };
 
   export const playPause = createSlice({
       name: 'playPause',
       initialState,
       reducers: {
-          changePlayPause: (state) => !state,
+          changePlayPause: (state) => Object.assign(state, {isPaused: !state.isPaused})
       }
   });
   

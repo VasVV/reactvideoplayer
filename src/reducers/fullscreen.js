@@ -8,7 +8,7 @@ const initialState = {
       name: 'fullscreen',
       initialState,
       reducers: {
-          setFullscreen: (state) => !state
+          setFullscreen: (state) => Object.assign(state, {isFullscreen: !state.isFullscreen})
         }
       }
   );

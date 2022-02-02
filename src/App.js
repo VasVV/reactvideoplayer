@@ -1,11 +1,11 @@
 import MainWindow from './components/mainwindow';
 import Timeline from './components/timeline';
 import Controls from './components/controls';
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import { changePlayPause } from './reducers/playpause';
 import { setFullscreen } from './reducers/fullscreen';
 import { setMuted, changeVolumeLevel} from './reducers/volume';
-import {changeCurrTime} from './reducers/currTime';
+import {setForward, setBackward} from './reducers/currTime';
 import { useDispatch, useSelector } from 'react-redux';
 import './App.scss';
 import { FullScreen, useFullScreenHandle } from "react-full-screen";
@@ -14,26 +14,47 @@ function App() {
 
   const dispatch = useDispatch();
   const handle = useFullScreenHandle();
-  const isFullscreen = useSelector(state => state.fullscreen);
+  const isFullscreen = useSelector(state => state.fullscreen.isFullscreen);
+  const isPaused = useSelector(state => state.playPause.isPaused);
+  const [hideControls, setHideControls] = useState(false);
 
   useEffect(() => {
     !isFullscreen ? handle.enter() : handle.exit();
   }, [isFullscreen])
 
+  useEffect(() => {
+    if (!isPaused) {
+      console.log('playing...')
+      setTimeout(() => {
+        setHideControls(true);
+      }, 3000)
+    } else if (isPaused) {
+      console.log('paused!')
+      setHideControls(false);
+    }
+  }, [isPaused])
+
 
   const handleKeyDown = e => {
-    e.preventDefault();
+
     switch (e.key) {
+
       case ' ': 
+        e.preventDefault();
         dispatch(changePlayPause());
+        break;
       case 'f':
         dispatch(setFullscreen());
+        break;
       case 'm':
-        dispatch(setMuted());  
+        dispatch(setMuted()); 
+        break; 
       case 'ArrowRight':
-        dispatch(changeCurrTime('isForward'));
+        dispatch(setForward());
+        break;
       case 'ArrowLeft':
-        dispatch(changeCurrTime('isBackward'));
+        dispatch(setBackward());
+        break;
     }
   }
 
@@ -52,7 +73,7 @@ function App() {
         <div className="App_top">
           <MainWindow />
         </div>
-        <div className="App_bottom">
+        <div className={hideControls? 'App_bottom_hidden' : "App_bottom" } onMouseOver={() => setHideControls(false)} onMouseOut={!isPaused ? () => setHideControls(true) : ''}>
           <Timeline />
           <Controls />
         </div>

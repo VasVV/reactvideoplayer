@@ -8,7 +8,7 @@ export default function Button({iconOne, iconTwo, isStatic, type, secondType}) {
     const [handler, setHandler] = useState(false);
     const dispatch = useDispatch();
     const isPaused = useSelector(state => state.playPause);
-    const isFullscreen = useSelector(state => state.fullscreen);
+    const isFullscreen = useSelector(state => state.fullscreen.isFullscreen);
     const isMuted = useSelector(state => state.volume.isMuted);
     const volumeLevel = useSelector(state => state.volume.volumeLevel)
     const [showVolume, setShowVolume] = useState(false);
@@ -46,7 +46,6 @@ export default function Button({iconOne, iconTwo, isStatic, type, secondType}) {
             <button 
                 onClick={() => handle()}
                 onMouseEnter={() => setShowVolume(true)}
-
                 >
                 { !isStatic ? !handler ? <FontAwesomeIcon icon ={iconOne} /> : <FontAwesomeIcon icon ={iconTwo} /> : <FontAwesomeIcon icon ={iconOne} /> }
             </button>    
